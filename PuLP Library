@@ -1,0 +1,31 @@
+import pulp
+
+# Define two variables: 'o' and 'p' representing quantities
+o = pulp.LpVariable('o', lowBound=0)
+p = pulp.LpVariable('p', lowBound=0)
+
+# Create a linear programming problem named 'max_carry' for maximizing profit
+max_carry = pulp.LpProblem("Maximum Profit", pulp.LpMaximize)
+
+# Add a constraint to the problem: 150*o + 100*p <= 3600
+max_carry += 150 * o + 100 * p <= 3600
+
+# Add two more constraints:
+# 1. o must be greater than or equal to 5
+max_carry += o >= 5
+# 2. o must be less than or equal to 2 times p
+max_carry += o <= 2 * p
+
+# Print the problem to see its formulation
+print(max_carry)
+
+# Get the status of the problem and print it
+status = pulp.LpStatus[max_carry.status]
+print(status)
+
+# Solve the linear programming problem
+max_carry.solve()
+
+# Print the optimal values of the variables
+for var in max_carry.variables():
+    print(var.name, "=>", var.varValue)

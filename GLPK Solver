@@ -1,0 +1,32 @@
+from scipy.optimize import linprog
+
+# Objective function coefficients (negative because linprog minimizes)
+c = [-0.70, -0.90]
+
+# Coefficients of the inequalities (LHS)
+A = [
+    [150, 100],   
+    [-1, 0],      
+    [1, -2],      
+]
+
+# Right-hand side values of the inequalities
+b = [3600, -5, 0]
+
+# Bounds for the variables
+x_bounds = (0, None)  
+y_bounds = (0, None)  
+
+# Solve the linear programming problem
+result = linprog(c, A_ub=A, b_ub=b, bounds=[x_bounds, y_bounds], method='highs')
+
+if result.success:
+    x_oranges, y_peaches = result.x
+    max_spent = -result.fun  
+    print("Number of oranges:", x_oranges)
+    print("Number of peaches:", y_peaches)
+    print("Maximum spent:", max_spent)
+else:
+    print("Optimization failed. Check the constraints.")
+
+
